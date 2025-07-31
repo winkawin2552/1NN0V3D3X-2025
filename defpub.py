@@ -19,7 +19,7 @@ def detect_objects():
     global color_pos
     color_pos.clear()  # Clear any previous detection
 
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
