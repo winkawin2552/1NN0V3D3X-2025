@@ -24,7 +24,7 @@ class Servo:
  
         self.servo_pin.write(self.current_angle)
  
-    def write(self, target_angle, step_delay=0.01):
+    def write(self, target_angle, step_delay=0.0075):
         if self.pin ==4:
             target_angle = target_angle * (180/270)
  
@@ -38,7 +38,7 @@ class Servo:
  
         self.current_angle = target_angle
  
-power_gripper = 91
+power_gripper = 94
 off_gripper = 35
  
 def setup(servo_pins = servo_pins):
@@ -48,9 +48,9 @@ def setup(servo_pins = servo_pins):
 def set90():
     pos(pos = [135,90,90,90,90])
  
-def pos(pos = [], pin = servo_pins, servos = servos):
+def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.0075):
     for i in range(len(pos)):
-        servos[pin[i]].write(pos[i])
+        servos[pin[i]].write(pos[i], step_delay = step_delay)
  
 def check():
     servos[8].write(0)
@@ -94,12 +94,13 @@ def drop(base = 30):
     time.sleep(1)
     servos[8].write(off_gripper)
 
-def grap(base = 40):
+def grab(base = 40):
     servos[8].write(off_gripper)
     time.sleep(1)
-    servos[7].write(150)
-    servos[4].write(150)
-    servos[6].write(100)
+    servos[7].write(155)
+    servos[6].write(136)
+    servos[4].write(144, step_delay = 0.01)
+    servos[6].write(110)
     servos[8].write(10)
     servos[4].write(135)
 
@@ -144,7 +145,7 @@ st1(base=use_pos[0])
 st2(base=use_pos[1])
 st3(base=use_pos[2])
 drop(base = base_)
-grap()
+grab()
  
  
 # set90()
