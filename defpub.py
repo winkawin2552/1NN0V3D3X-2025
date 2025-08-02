@@ -9,7 +9,7 @@ from threading import Thread
 CONFIDENCE_THRESHOLD = 0.4
 arrange_pos = [100, 175, 242]
 color_pos = []
-model = YOLO("best.pt")
+model = YOLO("/home/winkawin2552/CODE/INNOVEDEX-2025/best.pt")
 
 context = zmq.Context()
 publisher = context.socket(zmq.PUB)
@@ -23,32 +23,41 @@ def detect_objects():
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
+    frame_rate = 3  # n detections per second
+    prev_time = 0
+
     while True:
         ret, frame = cap.read()
         if not ret:
             print("❌ ไม่สามารถอ่านภาพจากกล้องได้")
             break
 
-        results = model(frame)[0]
+        curr_time = time.time()
+        if curr_time - prev_time > 1 / frame_rate:
+            prev_time = curr_time
 
-        for box in results.boxes:
-            conf = float(box.conf)
+            # 👇 ตรวจจับ object แค่ 2 ครั้งต่อวินาที
+            results = model(frame)[0]
 
-            if conf < CONFIDENCE_THRESHOLD:
-                continue
+            for box in results.boxes:
+                conf = float(box.conf)
 
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            cls_id = int(box.cls[0])
-            label = model.names[cls_id]
+                if conf < CONFIDENCE_THRESHOLD:
+                    continue
 
-            if label not in color_pos and label in ["blue", "green", "red"]:
-                color_pos.append(label)
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                cls_id = int(box.cls[0])
+                label = model.names[cls_id]
 
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            text = f"{label} {conf:.2f}"
-            cv2.putText(frame, text, (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+                if label not in color_pos and label in ["blue", "green", "red"]:
+                    color_pos.append(label)
 
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                text = f"{label} {conf:.2f}"
+                cv2.putText(frame, text, (x1, y1 - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+
+        # ✅ แสดงกล้องทุกเฟรม
         cv2.imshow("YOLO Detection", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
