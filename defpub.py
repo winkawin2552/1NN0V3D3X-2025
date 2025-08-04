@@ -7,7 +7,7 @@ import tkinter as tk
 from threading import Thread
 
 CONFIDENCE_THRESHOLD = 0.4
-arrange_pos = [100, 175, 242]
+arrange_pos = [96, 168, 235]
 color_pos = []
 model = YOLO("/home/winkawin2552/CODE/INNOVEDEX-2025/best.pt")
 
@@ -19,11 +19,11 @@ def detect_objects():
     global color_pos
     color_pos.clear()  # Clear any previous detection
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(2)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-    frame_rate = 3  # n detections per second
+    frame_rate = 33  # n detections per second
     prev_time = 0
 
     while True:

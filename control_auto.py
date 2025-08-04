@@ -38,7 +38,7 @@ class Servo:
  
         self.current_angle = target_angle
  
-power_gripper = 94
+power_gripper = 93
 off_gripper = 35
  
 def setup(servo_pins = servo_pins):
@@ -48,7 +48,7 @@ def setup(servo_pins = servo_pins):
 def set90():
     pos(pos = [135,90,90,90,90])
  
-def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.0075):
+def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.008):
     for i in range(len(pos)):
         servos[pin[i]].write(pos[i], step_delay = step_delay)
  
@@ -66,7 +66,7 @@ def st1(base = 125):
     servos[7].write(180)
     pos(pos = [135,90,90,180,0], ) # up
     pos(pos = [base,90,180,163,0]) #bit up
-    pos(pos = [base,13,160,163,power_gripper]) # down
+    pos(pos = [base,13,162,163,power_gripper]) # down
 
 def st2(base = 125):
     servos[6].write(90)
@@ -75,7 +75,7 @@ def st2(base = 125):
     pos(pos = [base,60,180,167,off_gripper]) # down
     time.sleep(1)
     pos(pos = [base,60,180,163,off_gripper]) #bit up
-    pos(pos = [base,13,160,163,power_gripper]) # down
+    pos(pos = [base,13,162,163,power_gripper]) # down
  
 def st3(base = 125):
     servos[6].write(90)
@@ -84,12 +84,12 @@ def st3(base = 125):
     pos(pos = [base,60,180,167,off_gripper]) # down
     time.sleep(1)
     pos(pos = [base,60,180,163,off_gripper]) #bit up
-    pos(pos = [base,13,160,163,power_gripper]) # down
+    pos(pos = [base,13,162,163,power_gripper]) # down
 
 def drop(base = 30):
-    servos[6].write(160)
+    servos[6].write(162)
     servos[5].write(90)
-    pos(pos = [base,90,160,180,power_gripper]) # down
+    pos(pos = [base,90,162,180,power_gripper]) # down
     servos[5].write(10)
     time.sleep(1)
     servos[8].write(off_gripper)
@@ -138,7 +138,7 @@ time.sleep(1)
 a = 100
 b = 175
 c = 242 #245
-base_= 40
+base_= 35
  
  
 st1(base=use_pos[0])
