@@ -36,7 +36,7 @@ def detect_objects():
         if curr_time - prev_time > 1 / frame_rate:
             prev_time = curr_time
 
-            # 👇 ตรวจจับ object แค่ 2 ครั้งต่อวินาที
+            # 👇 ตรวจจับ object แค่ n ครั้งต่อวินาที
             results = model(frame)[0]
 
             for box in results.boxes:
