@@ -1,6 +1,5 @@
 from pyfirmata2 import Arduino
 import time
- 
 import zmq
 import json
  
@@ -38,7 +37,7 @@ class Servo:
  
         self.current_angle = target_angle
  
-power_gripper = 93
+power_gripper = 95
 off_gripper = 35
  
 def setup(servo_pins = servo_pins):
@@ -48,7 +47,7 @@ def setup(servo_pins = servo_pins):
 def set90():
     pos(pos = [135,90,90,90,90])
  
-def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.008):
+def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.007):
     for i in range(len(pos)):
         servos[pin[i]].write(pos[i], step_delay = step_delay)
  
@@ -56,50 +55,60 @@ def check():
     servos[8].write(0)
     pos(pos = [40,99,150,0,0])
     time.sleep(3)
-    pos(pos = [242,99,150,0,0])
+    pos(pos = [242,99,150,0,0], step_delay=0.01)
  
-
+def drop_normal(base):
+    pos(pos = [base,0,156,169,power_gripper])
 
 def st1(base = 125):
+    print("st1")
     time.sleep(0.5)
     servos[8].write(0)
     servos[7].write(180)
     pos(pos = [135,90,90,180,0], ) # up
     pos(pos = [base,90,180,163,0]) #bit up
-    pos(pos = [base,13,162,163,power_gripper]) # down
+    pos(pos = [base,16,150,150,power_gripper]) if base == use_pos[2] else drop_normal(base)
 
 def st2(base = 125):
+    print('st2')
     servos[6].write(90)
-    pos(pos = [135,90,90,180,power_gripper], ) # up
+    print("upup")
+    # pos(pos = [135,90,120,180,power_gripper], ) # up
+    print('drop')
     pos(pos = [base,35,180,167,off_gripper]) # down
+    servos[7].write(180)
     pos(pos = [base,60,180,167,off_gripper]) # down
-    time.sleep(1)
-    pos(pos = [base,60,180,163,off_gripper]) #bit up
-    pos(pos = [base,13,162,163,power_gripper]) # down
+    time.sleep(0.2)
+    pos(pos = [base,60,180,180,off_gripper]) #bit up
+    pos(pos = [base,16,150,150,power_gripper]) if base == use_pos[2] else drop_normal(base)
  
 def st3(base = 125):
+    print('st3')
     servos[6].write(90)
-    pos(pos = [135,90,90,180,power_gripper], ) # up
+    print("upup")
+    # pos(pos = [135,90,120,180,power_gripper], ) # up
+    print('drop')
     pos(pos = [base,35,180,167,off_gripper]) # down
+    servos[7].write(180)
     pos(pos = [base,60,180,167,off_gripper]) # down
-    time.sleep(1)
-    pos(pos = [base,60,180,163,off_gripper]) #bit up
-    pos(pos = [base,13,162,163,power_gripper]) # down
+    time.sleep(0.2)
+    pos(pos = [base,60,180,180,off_gripper]) #bit up
+    pos(pos = [base,16,160,150,power_gripper]) if base == use_pos[2] else drop_normal(base)
 
 def drop(base = 30):
-    servos[6].write(162)
+    time.sleep(0.3)
     servos[5].write(90)
     pos(pos = [base,90,162,180,power_gripper]) # down
-    servos[5].write(10)
+    pos(pos = [base,10,162,180,power_gripper], step_delay=0.01)
     time.sleep(1)
     servos[8].write(off_gripper)
 
 def grab(base = 40):
     servos[8].write(off_gripper)
-    time.sleep(1)
+    time.sleep(0.3)
     servos[7].write(155)
     servos[6].write(136)
-    servos[4].write(144, step_delay = 0.01)
+    servos[4].write(145, step_delay = 0.01)
     servos[6].write(110)
     servos[8].write(10)
     servos[4].write(135)
@@ -134,12 +143,10 @@ use_pos = json.loads(json_payload)
 print(f"blue {use_pos[0]}, green {use_pos[1]}, red {use_pos[2]}")
 
  
-time.sleep(1)
-a = 100
-b = 175
-c = 242 #245
-base_= 35
- 
+a = 82
+b = 193
+c = 239 #245
+base_= 33
  
 st1(base=use_pos[0])
 st2(base=use_pos[1])

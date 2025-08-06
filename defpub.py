@@ -7,7 +7,7 @@ import tkinter as tk
 from threading import Thread
 
 CONFIDENCE_THRESHOLD = 0.4
-arrange_pos = [96, 168, 235]
+arrange_pos = [82, 188, 239]
 color_pos = []
 model = YOLO("/home/winkawin2552/CODE/INNOVEDEX-2025/best.pt")
 
