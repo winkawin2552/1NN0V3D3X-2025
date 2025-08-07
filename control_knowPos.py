@@ -1,7 +1,5 @@
 from pyfirmata2 import Arduino
 import time
-import zmq
-import json
  
 board = Arduino('/dev/ttyACM0')
  
@@ -38,7 +36,7 @@ class Servo:
         self.current_angle = target_angle
  
 power_gripper = 95
-off_gripper = 38
+off_gripper = 42
  
 def setup(servo_pins = servo_pins):
     for pin in servo_pins:
@@ -58,10 +56,14 @@ def check():
     pos(pos = [242,99,150,0,0], step_delay=0.01)
  
 def grab_normal(base):
-    pos(pos = [base,0,156,169,off_gripper])
+    servos[5].write(20)
+    servos[6].write(156)
+    pos(pos = [base,0,156,169,power_gripper])
 
 def grab_ad(base):
-    pos(pos = [base,0,141,159,off_gripper])
+    servos[5].write(20)
+    servos[6].write(141)
+    pos(pos = [base,0,141,159,power_gripper])
 
 def drop_normal(base):
     pos(pos = [base,13,156,180,off_gripper])
@@ -77,22 +79,18 @@ def st1(base = 125):
     grab_ad(base)if base == use_pos[2] else grab_normal(base)
 
 def st2(base = 125):
-    servos[6].write(120)
+    servos[6].write(130)
     drop_ad(base) if base == use_pos[2] else drop_normal(base)
     servos[7].write(180)
-    pos(pos = [base,60,180,167,off_gripper]) # down
     time.sleep(0.2)
-    pos(pos = [base,60,180,180,off_gripper]) #bit up
     grab_ad(base) if base == use_pos[2] else grab_normal(base)
 
  
 def st3(base = 125):
-    servos[6].write(120)
+    servos[6].write(130)
     drop_ad(base) if base == use_pos[2] else drop_normal(base)
     servos[7].write(180)
-    pos(pos = [base,60,180,167,off_gripper]) # down
     time.sleep(0.2)
-    pos(pos = [base,60,180,180,off_gripper]) #bit up
     grab_ad(base) if base == use_pos[2] else grab_normal(base)
 
 def drop(base = 30):
@@ -116,38 +114,12 @@ def grab(base = 40):
     
 setup()
 servos[8].write(0)
-pos(pos = [40,99,150,0,0])
-
-context = zmq.Context()
-subscriber = context.socket(zmq.SUB)
-subscriber.connect("tcp://localhost:5560")
-subscriber.setsockopt_string(zmq.SUBSCRIBE, "jsondata")
-
-while 1:
-    message = subscriber.recv_string()
-    topic, json_payload = message.split(' ', 1)
-    num = json.loads(json_payload)
-    if num == 1:
-        break
-
-check()
-
-# now wait for next real JSON list
-message = subscriber.recv_string()
-topic, json_payload = message.split(' ', 1)
-use_pos = json.loads(json_payload)
-
-message = subscriber.recv_string()
-topic, json_payload = message.split(' ', 1)
-use_pos = json.loads(json_payload)
-print(f"blue {use_pos[0]}, green {use_pos[1]}, red {use_pos[2]}")
-
  
 a = 82
-b = 193
-c = 239 #245
+b = 184
+c = 239 
 base_= 33
- 
+use_pos = [a,b,c][::-1]
 st1(base=use_pos[0])
 st2(base=use_pos[1])
 st3(base=use_pos[2])

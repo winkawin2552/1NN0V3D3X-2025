@@ -48,7 +48,8 @@ def on_entry_change(event, pin):
 
 
 def reset_servos():
-    pos = [0, 99, 150, 0, 0]
+    servos[8].write(169)
+    pos = [82, 0, 156, 169, 0]
     for i, pin in enumerate(servo_pins):
         servos[pin].write(pos[i])
         sliders[pin].set(pos[i])
