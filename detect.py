@@ -7,7 +7,7 @@ cap = cv2.VideoCapture(2)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-CONFIDENCE_THRESHOLD = 0.4
+CONFIDENCE_THRESHOLD = 0.7
 arrange_pos = [60, 125, 156]
 color_pos = []
 
@@ -43,8 +43,6 @@ while True:
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    # if len(color_pos) == 3:
-    #     break
 match = {}
 for i in range(len(color_pos)):
     match[color_pos[i]] = arrange_pos[i]
