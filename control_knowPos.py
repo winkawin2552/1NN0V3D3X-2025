@@ -1,5 +1,8 @@
 from pyfirmata2 import Arduino
 import time
+import zmq
+import json
+
  
 board = Arduino('/dev/ttyACM0')
  
@@ -36,7 +39,7 @@ class Servo:
         self.current_angle = target_angle
  
 power_gripper = 95
-off_gripper = 47
+off_gripper = 38
  
 def setup(servo_pins = servo_pins):
     for pin in servo_pins:
@@ -45,18 +48,18 @@ def setup(servo_pins = servo_pins):
 def set90():
     pos(pos = [135,90,90,90,90])
  
-def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.007):
+def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.006):
     for i in range(len(pos)):
         servos[pin[i]].write(pos[i], step_delay = step_delay)
  
 def check():
     servos[8].write(0)
     pos(pos = [40,99,150,0,0])
-    time.sleep(3)
+    time.sleep(2)
     pos(pos = [242,99,150,0,0], step_delay=0.01)
  
 def grab_normal(base):
-    pos(pos = [base,0,156,169,power_gripper])
+    pos(pos = [base,15,165,165,power_gripper])
 
 def grab_ad(base):
     servos[6].write(146)
@@ -65,6 +68,10 @@ def grab_ad(base):
 
 def drop_normal(base):
     pos(pos = [base,13,156,180,off_gripper])
+
+def drop_normal2(base):
+    pos(pos = [base,10,160,180,off_gripper])
+
 def drop_ad(base):
     pos(pos = [base,15,151,165,off_gripper])
 
@@ -78,6 +85,8 @@ def st1(base = 125):
 
 def st2(base = 125):
     servos[6].write(120) # 130
+    servos[4].write(base)
+    time.sleep(0.2)
     drop_ad(base) if base == use_pos[2] else drop_normal(base)
     time.sleep(0.2)
     grab_ad(base) if base == use_pos[2] else grab_normal(base)
@@ -85,19 +94,14 @@ def st2(base = 125):
  
 def st3(base = 125):
     servos[6].write(120) 
-    drop_ad(base) if base == use_pos[2] else drop_normal(base)
-    servos[5].write(40)
+    servos[4].write(base)
     time.sleep(0.2)
-    pos(pos = [135,90,90,90,off_gripper])
-    # servos[7].write(180)
-    # grab_ad(base) if base == use_pos[2] else grab_normal(base)
+    drop_ad(base) if base == use_pos[2] else drop_normal2(base)
     time.sleep(0.5)
-    servos[8].write(off_gripper)
-    servos[7].write(180)
-    pos(pos = [base,90,180,180,0], ) # up
-    pos(pos = [base,90,180,163,0]) #bit up
-    input()
-    grab_ad(base)if base == use_pos[2] else grab_normal(base, n = 0)
+    if base == use_pos[2]:
+        pos(pos = [base,15,165,165,power_gripper])
+    else :
+        grab_ad(base)
 
 def drop(base = 30):
     time.sleep(0.3)
@@ -111,21 +115,26 @@ def grab(base = 40):
     time.sleep(0.3)
     servos[7].write(155)
     servos[6].write(136)
-    servos[4].write(135, step_delay = 0.01)
+    servos[4].write(138, step_delay = 0.01)
     servos[8].write(10)
-    servos[7].write(145)
     servos[6].write(110)
-    servos[4].write(135)
-
+    servos[7].write(145)
+    servos[0].write(0)
     
+    
+
+
 setup()
-servos[8].write(0)
- 
+time.sleep(0.5)
+
 a = 82
-b = 184
-c = 239
-base_= 33
-use_pos = [b,c,a]
+b = 192
+c = 245
+base_= 35
+use_pos = [c,b,a]
+if use_pos [0] == 245 and use_pos[1] == 192:
+    use_pos[1] = 185
+
 st1(base=use_pos[0])
 st2(base=use_pos[1])
 st3(base=use_pos[2])
