@@ -121,7 +121,7 @@ def grab(base = 40):
 
 setup()
 time.sleep(0.5)
-pos(pos = [40,99,130,0,0])
+pos(pos = [223,114,150,0,0])
 
 context = zmq.Context()
 subscriber = context.socket(zmq.SUB)

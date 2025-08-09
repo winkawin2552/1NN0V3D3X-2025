@@ -6,7 +6,7 @@ import json
 import tkinter as tk
 from threading import Thread
 
-CONFIDENCE_THRESHOLD = 0.4
+CONFIDENCE_THRESHOLD = 0.7
 arrange_pos = [82, 192, 245]
 color_pos = []
 ready = False
@@ -51,13 +51,13 @@ def detect_objects():
                 conf2 = float(obj2.conf)
 
                 if conf1 >= CONFIDENCE_THRESHOLD and conf2 >= CONFIDENCE_THRESHOLD and ready:
-                    _, y1, __, ___ = map(int, obj1.xyxy[0])
-                    _, y2, __, ___ = map(int, obj2.xyxy[0])
+                    x1, y1, xx1, yy1 = map(int, obj1.xyxy[0])
+                    x2, y2, xx2, yy2 = map(int, obj2.xyxy[0])
 
                     label1 = model.names[int(obj1.cls[0])]
                     label2 = model.names[int(obj2.cls[0])]
-
-                    if y1 > y2:
+                    print(f'{label1}: {x1, y1, xx1, yy1}, {label2}: {x2, y2, xx2, yy2}')
+                    if xx1 > xx2:
                         color_pos = [label1, label2]
                     else:
                         color_pos = [label2, label1]
@@ -66,6 +66,7 @@ def detect_objects():
                     for i in ["blue", "green", "red"]:
                         if i not in color_pos:
                             color_pos.append(i)
+                            color_pos = color_pos[::-1]
                             print(color_pos)
                             break
                     
@@ -113,7 +114,7 @@ def on_button_click():
     global ready
     ready = True
     color_pos = []
-    publisher.send_string("jsondata 1")
+    # publisher.send_string("jsondata 1")
     print("📤 ส่งเริ่มทำงาน: jsondata 1")
 
 # Start detection thread immediately
