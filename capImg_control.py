@@ -48,7 +48,7 @@ def setup(servo_pins = servo_pins):
 def set90():
     pos(pos = [135,90,90,90,90])
  
-def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.015):
+def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.025):
     for i in range(len(pos)):
         servos[pin[i]].write(pos[i], step_delay = step_delay)
  

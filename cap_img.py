@@ -2,7 +2,7 @@ import cv2 as cv
 import time
 
 cap = cv.VideoCapture(0)
-count = 0
+count = 600
 while 1:
     _ ,frame = cap.read()
     if _:
@@ -12,5 +12,5 @@ while 1:
         print(count)
         count+= 1
         key = cv.waitKey(33)
-    if key == ord('q') or count ==400:
+    if key == ord('q') or count ==900:
         break
