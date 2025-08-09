@@ -37,7 +37,7 @@ class Servo:
  
         self.current_angle = target_angle
  
-power_gripper = 95
+power_gripper = 85
 off_gripper = 38
  
 def setup(servo_pins = servo_pins):
@@ -47,7 +47,7 @@ def setup(servo_pins = servo_pins):
 def set90():
     pos(pos = [135,90,90,90,90])
  
-def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.006):
+def pos(pos = [], pin = servo_pins, servos = servos, step_delay = 0.01): #0.006
     for i in range(len(pos)):
         servos[pin[i]].write(pos[i], step_delay = step_delay)
  
@@ -108,20 +108,20 @@ def drop(base = 30):
     servos[7].write(90)
     pos(pos = [base,90,162,90,power_gripper]) # down
     servos[7].write(180)
-    pos(pos = [base,10,162,180,power_gripper], step_delay=0.01)
+    pos(pos = [base,10,162,180,power_gripper], step_delay=0.015)
 
 def grab(base = 40):
     time.sleep(0.3)
     servos[7].write(155)
     servos[6].write(136)
-    servos[4].write(138, step_delay = 0.01)
+    servos[4].write(140, step_delay = 0.01) #138
     servos[8].write(10)
-    servos[6].write(110)
-    servos[7].write(145)
+    servos[6].write(70) # 110
+    servos[7].write(120)
 
 setup()
 time.sleep(0.5)
-pos(pos = [223,114,150,0,0])
+pos(pos = [223,114,150,0,0], step_delay= 0.015)
 
 context = zmq.Context()
 subscriber = context.socket(zmq.SUB)
@@ -138,7 +138,7 @@ if use_pos [0] == 245 and use_pos[1] == 192:
 a = 82
 b = 195
 c = 245
-base_= 35
+base_= 33
 
 st1(base=use_pos[0])
 st2(base=use_pos[1])
