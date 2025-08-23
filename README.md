@@ -3,5 +3,8 @@
 ## Robot Arm Design 
 * https://cad.onshape.com/documents/8932c37d3398917467428bac/w/5dbf385854f65b02d1383ff0/e/0fa5fa8455feab1cedda1707?fbclid=IwY2xjawLS_ARleHRuA2FlbQIxMQABHvsUvDLpKvG7JgVxOTjkLOU4U3vokJkhpIhvA87Wtdrw4JYCqaWVHXXCgarp_aem_oVodCx8v5mlYik_OO46pdg
 
+## Video
+https://github.com/user-attachments/assets/7578c4a0-0f65-422f-b8ca-2f2581b4a858
+
 ## RESAULT
 ### last 64 teams :)
